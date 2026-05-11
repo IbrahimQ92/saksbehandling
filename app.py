@@ -468,19 +468,40 @@ hr { border-color: var(--border) !important; margin: 1.6rem 0 !important; }
 [data-testid="stRadio"] label,
 [data-testid="stFileUploader"] label {
   font-size: 0.82rem !important;
-  font-weight: 600 !important;
+  font-weight: 700 !important;
   text-transform: uppercase !important;
   letter-spacing: 0.07em !important;
-  color: var(--muted) !important;
+  color: #8aafc8 !important;
 }
-[data-testid="stSelectbox"] > div > div,
-[data-testid="stNumberInput"] input {
-  border: 1.5px solid var(--border) !important;
-  border-radius: 8px !important;
-  background: var(--white) !important;
-  font-size: 0.95rem !important;
-  transition: border-color 0.2s !important;
+
+[data-testid="stSelectbox"] label *,
+[data-testid="stNumberInput"] label *,
+[data-testid="stRadio"] label *,
+[data-testid="stFileUploader"] label * {
+  color: #8aafc8 !important;
 }
+ [data-testid="stSelectbox"] > div > div,
+ [data-testid="stNumberInput"] input {
+   border: 1.5px solid var(--border) !important;
+   border-radius: 8px !important;
+   background: var(--white) !important;
+   color: #1a2535 !important;
+   font-size: 0.95rem !important;
+   transition: border-color 0.2s !important;
+ }
+
+ [data-testid="stSelectbox"] * {
+   color: #1a2535 !important;
+ }
+
+ [data-testid="stNumberInput"] input {
+   color: #1a2535 !important;
+   -webkit-text-fill-color: #1a2535 !important;
+ }
+
+ [data-baseweb="select"] span {
+   color: #1a2535 !important;
+ }
 [data-testid="stSelectbox"] > div > div:hover,
 [data-testid="stNumberInput"] input:focus {
   border-color: var(--teal) !important;
