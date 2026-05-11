@@ -395,10 +395,10 @@ st.markdown("""
   --red:    #ef4444;
   --green:  #10b981;
   --blue:   #3b82f6;
-  --surface:#f0f4f8;
-  --border: #d6e0ea;
-  --text:   #1a2535;
-  --muted:  #64748b;
+  --surface:#0d1b2a;
+  --border: rgba(138,175,200,0.35);
+  --text:   #dbeafe;
+  --muted:  #8aafc8;
   --white:  #ffffff;
   --radius: 12px;
   --shadow: 0 4px 24px rgba(13,27,42,0.10);
@@ -410,6 +410,26 @@ html, body, [class*="css"] {
   font-family: 'DM Sans', sans-serif !important;
   color: var(--text) !important;
   background: var(--surface) !important;
+}
+
+.stApp {
+  background: linear-gradient(135deg, #0d1b2a 0%, #111827 55%, #162032 100%) !important;
+  color: var(--text) !important;
+}
+
+.main,
+.block-container,
+section.main,
+[data-testid="stAppViewContainer"] {
+  background: transparent !important;
+  color: var(--text) !important;
+}
+
+.stMarkdown,
+.stMarkdown p,
+.stMarkdown span,
+.stMarkdown div {
+  color: inherit;
 }
 
 /* ── Sidebar ─────────────────────────────────────────── */
@@ -438,8 +458,9 @@ html, body, [class*="css"] {
 }
 
 /* ── Hide default Streamlit chrome ──────────────────── */
-#MainMenu, footer { visibility: visible; }
-#header { visibility: hidden; }
+#MainMenu, footer, header { visibility: hidden !important; }
+[data-testid="stToolbar"] { display: none !important; }
+[data-testid="stDecoration"] { display: none !important; }
 .block-container { padding-top: 1.5rem !important; max-width: 1160px !important; }
 
 /* Keep sidebar visible and remove collapse controls */
@@ -532,7 +553,7 @@ hr { border-color: var(--border) !important; margin: 1.6rem 0 !important; }
 /* ── Download buttons ────────────────────────────────── */
 [data-testid="stDownloadButton"] > button {
   background: transparent !important;
-  color: var(--teal2) !important;
+  color: var(--teal) !important;
   font-family: 'Syne', sans-serif !important;
   font-weight: 600 !important;
   font-size: 0.9rem !important;
@@ -559,9 +580,22 @@ hr { border-color: var(--border) !important; margin: 1.6rem 0 !important; }
 
 /* ── Expander ────────────────────────────────────────── */
 [data-testid="stExpander"] {
-  border: 1.5px solid var(--border) !important;
+  border: 1.5px solid rgba(138,175,200,0.35) !important;
   border-radius: var(--radius) !important;
-  background: var(--white) !important;
+  background: rgba(255,255,255,0.04) !important;
+}
+
+[data-testid="stExpander"] summary,
+[data-testid="stExpander"] summary *,
+[data-testid="stExpander"] p,
+[data-testid="stExpander"] div {
+  color: #dbeafe !important;
+}
+
+[data-testid="stExpander"] code,
+[data-testid="stExpander"] pre {
+  color: #1a2535 !important;
+  background: #f8fafc !important;
 }
 </style>
 """, unsafe_allow_html=True)
@@ -1051,7 +1085,7 @@ if analyse_btn:
     with dl_col:
         st.markdown("""
         <div style="font-family:'Syne',sans-serif; font-size:0.78rem; font-weight:700; text-transform:uppercase;
-                    letter-spacing:0.12em; color:#64748b; margin-bottom:10px;">
+                    letter-spacing:0.12em; color:#8aafc8; margin-bottom:10px;">
           Last ned resultat
         </div>
         """, unsafe_allow_html=True)
