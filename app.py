@@ -692,10 +692,10 @@ st.markdown("""
 <div style="display:flex; align-items:center; gap:10px; margin-bottom:20px;">
   <div style="width:4px; height:28px; background:linear-gradient(180deg,#00c9a7,#0d7c6a); border-radius:2px;"></div>
   <div>
-    <div style="font-family:'Syne',sans-serif; font-size:1.2rem; font-weight:700; color:#1a2535;">
+    <div style="font-family:'Syne',sans-serif; font-size:1.2rem; font-weight:700; color:#f8fafc;">
       Registrer byggesøknad
     </div>
-    <div style="font-size:0.83rem; color:#64748b; margin-top:1px;">
+    <div style="font-size:0.83rem; color:#8aafc8; margin-top:1px;">
       Fyll inn opplysninger om tiltaket, eller last opp et dokument
     </div>
   </div>
