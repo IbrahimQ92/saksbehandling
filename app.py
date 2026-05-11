@@ -13,16 +13,16 @@ from datetime import datetime
 # ─────────────────────────────────────────────
 
 def evaluate_application(data):
-    byggtype = data.get("byggtype")
-    areal = data.get("areal")
-    avstand = data.get("avstand")
-    regulert = data.get("regulert")
-    dispensasjon = data.get("dispensasjon")
-    eiendomstype = data.get("eiendomstype")
-    mønehøyde = data.get("mønehøyde")
-    vinduer_mot_nabo = data.get("vinduer_mot_nabo")
-    frittstående = data.get("frittstående")
-    nabovarsel_sendt = data.get("nabovarsel_sendt")
+    byggtype = data.get("byggtype") or "Ukjent tiltak"
+    areal = data.get("areal") or 0
+    avstand = data.get("avstand") or 0
+    regulert = data.get("regulert") or "Ikke oppgitt"
+    dispensasjon = data.get("dispensasjon") or "Ikke oppgitt"
+    eiendomstype = data.get("eiendomstype") or "ukjent eiendomstype"
+    mønehøyde = data.get("mønehøyde") or 0
+    vinduer_mot_nabo = data.get("vinduer_mot_nabo") or "Ikke oppgitt"
+    frittstående = data.get("frittstående") or "Ikke oppgitt"
+    nabovarsel_sendt = data.get("nabovarsel_sendt") or "Ikke oppgitt"
 
     summary = (
         f"Søknaden gjelder {byggtype.lower()} på en {eiendomstype.lower()}. "
@@ -794,28 +794,38 @@ col_a, col_b = st.columns(2, gap="large")
 with col_a:
     st.markdown("<div style='font-family:Syne,sans-serif; font-size:0.78rem; font-weight:700; text-transform:uppercase; letter-spacing:0.12em; color:#00a88d; margin-bottom:14px;'>Tiltakets egenskaper</div>", unsafe_allow_html=True)
     byggtype = st.selectbox("Byggtype", ["Garasje", "Tilbygg"],
-        index=0 if not prefill_data else (["Garasje","Tilbygg"].index(prefill_data.get("byggtype","Garasje")) if prefill_data.get("byggtype","Garasje") in ["Garasje","Tilbygg"] else 0))
+        index=None if not prefill_data else (["Garasje","Tilbygg"].index(prefill_data.get("byggtype","Garasje")) if prefill_data.get("byggtype","Garasje") in ["Garasje","Tilbygg"] else None),
+        placeholder="Velg byggtype")
     areal = st.number_input("Størrelse (m²)", min_value=0.0, max_value=200.0,
-        value=float(prefill_data.get("areal", 40)) if prefill_data else 40.0)
+        value=float(prefill_data.get("areal", 0)) if prefill_data else None,
+        placeholder="Oppgi areal")
     avstand = st.number_input("Avstand til nabogrense (meter)", min_value=0.0, max_value=20.0,
-        value=float(prefill_data.get("avstand", 5)) if prefill_data else 5.0)
+        value=float(prefill_data.get("avstand", 0)) if prefill_data else None,
+        placeholder="Oppgi avstand")
     mønehøyde = st.number_input("Mønehøyde (meter)", min_value=0.0, max_value=15.0,
-        value=float(prefill_data.get("mønehøyde", 4.5)) if prefill_data else 4.5)
+        value=float(prefill_data.get("mønehøyde", 0)) if prefill_data else None,
+        placeholder="Oppgi mønehøyde")
 
 with col_b:
     st.markdown("<div style='font-family:Syne,sans-serif; font-size:0.78rem; font-weight:700; text-transform:uppercase; letter-spacing:0.12em; color:#00a88d; margin-bottom:14px;'>Regulering og status</div>", unsafe_allow_html=True)
     regulert = st.selectbox("Er eiendommen regulert?", ["Ja", "Nei"],
-        index=0 if not prefill_data else (["Ja","Nei"].index(prefill_data.get("regulert","Ja")) if prefill_data.get("regulert","Ja") in ["Ja","Nei"] else 0))
+        index=None if not prefill_data else (["Ja","Nei"].index(prefill_data.get("regulert","Ja")) if prefill_data.get("regulert","Ja") in ["Ja","Nei"] else None),
+        placeholder="Velg status")
     dispensasjon = st.selectbox("Søkes det om dispensasjon?", ["Nei", "Ja"],
-        index=0 if not prefill_data else (["Nei","Ja"].index(prefill_data.get("dispensasjon","Nei")) if prefill_data.get("dispensasjon","Nei") in ["Nei","Ja"] else 0))
+        index=None if not prefill_data else (["Nei","Ja"].index(prefill_data.get("dispensasjon","Nei")) if prefill_data.get("dispensasjon","Nei") in ["Nei","Ja"] else None),
+        placeholder="Velg ja/nei")
     eiendomstype = st.selectbox("Eiendomstype", ["Enebolig","Tomannsbolig","Fritidsbolig"],
-        index=0 if not prefill_data else (["Enebolig","Tomannsbolig","Fritidsbolig"].index(prefill_data.get("eiendomstype","Enebolig")) if prefill_data.get("eiendomstype","Enebolig") in ["Enebolig","Tomannsbolig","Fritidsbolig"] else 0))
+        index=None if not prefill_data else (["Enebolig","Tomannsbolig","Fritidsbolig"].index(prefill_data.get("eiendomstype","Enebolig")) if prefill_data.get("eiendomstype","Enebolig") in ["Enebolig","Tomannsbolig","Fritidsbolig"] else None),
+        placeholder="Velg eiendomstype")
     vinduer_mot_nabo = st.selectbox("Vinduer mot nabo?", ["Nei","Ja"],
-        index=0 if not prefill_data else (["Nei","Ja"].index(prefill_data.get("vinduer_mot_nabo","Nei")) if prefill_data.get("vinduer_mot_nabo","Nei") in ["Nei","Ja"] else 0))
+        index=None if not prefill_data else (["Nei","Ja"].index(prefill_data.get("vinduer_mot_nabo","Nei")) if prefill_data.get("vinduer_mot_nabo","Nei") in ["Nei","Ja"] else None),
+        placeholder="Velg ja/nei")
     frittstående = st.selectbox("Er tiltaket frittstående?", ["Ja","Nei"],
-        index=0 if not prefill_data else (["Ja","Nei"].index(prefill_data.get("frittstående","Ja")) if prefill_data.get("frittstående","Ja") in ["Ja","Nei"] else 0))
+        index=None if not prefill_data else (["Ja","Nei"].index(prefill_data.get("frittstående","Ja")) if prefill_data.get("frittstående","Ja") in ["Ja","Nei"] else None),
+        placeholder="Velg ja/nei")
     nabovarsel_sendt = st.selectbox("Er nabovarsel sendt?", ["Ja","Nei"],
-        index=0 if not prefill_data else (["Ja","Nei"].index(prefill_data.get("nabovarsel_sendt","Ja")) if prefill_data.get("nabovarsel_sendt","Ja") in ["Ja","Nei"] else 0))
+        index=None if not prefill_data else (["Ja","Nei"].index(prefill_data.get("nabovarsel_sendt","Ja")) if prefill_data.get("nabovarsel_sendt","Ja") in ["Ja","Nei"] else None),
+        placeholder="Velg ja/nei")
 
 st.markdown("</div>", unsafe_allow_html=True)
 
@@ -918,16 +928,17 @@ if analyse_btn:
     def card_start(title, icon=""):
         st.markdown(f"""
         <div style="
-          background: white;
-          border: 1.5px solid #d6e0ea;
+          background: transparent;
+          border: 1.5px solid rgba(138,175,200,0.35);
           border-radius: 14px;
-          padding: 10px;
+          padding: 14px;
           height: 100%;
           box-shadow: 0 2px 12px rgba(13,27,42,0.06);
+          color: #f8fafc;
         ">
-          <div style="display:flex; align-items:center; justify-content:center; gap:8px; margin-bottom:12px; padding-bottom:4px; text-align:center;">
-            <span style="font-size:1.1rem;">{icon}</span>
-            <span style="font-family:'Syne',sans-serif; font-size:0.95rem; font-weight:700; color:#1a2535;">{title}</span>
+          <div style="display:flex; align-items:center; justify-content:center; gap:8px; margin-bottom:12px; padding-bottom:4px; text-align:center; color:#f8fafc;">
+            <span style="font-size:1.1rem; color:#f8fafc;">{icon}</span>
+            <span style="font-family:'Syne',sans-serif; font-size:0.95rem; font-weight:700; color:#f8fafc;">{title}</span>
           </div>
         """, unsafe_allow_html=True)
 
@@ -937,9 +948,9 @@ if analyse_btn:
     with col1:
         card_start("Sammendrag av søknad", "📋")
         st.markdown(f"""
-        <p style="font-size:0.88rem; color:#64748b; line-height:1.7; margin:0;">
+        <div style="font-size:0.88rem; color:#dbeafe; line-height:1.7; margin:0;">
           {result["summary"]}
-        </p>
+        </div>
         """, unsafe_allow_html=True)
         card_end()
 
@@ -953,14 +964,14 @@ if analyse_btn:
             if not line:
                 formatted += "<div style='height:8px'></div>"
             elif line.startswith("Forslag:"):
-                formatted += f"<div style='font-family:Syne,sans-serif; font-weight:700; font-size:0.95rem; color:#1a2535; margin-bottom:6px;'>{line}</div>"
+                formatted += f"<div style='font-family:Syne,sans-serif; font-weight:700; font-size:0.95rem; color:#f8fafc; margin-bottom:6px;'>{line}</div>"
             elif line.startswith("Begrunnelse:") or line.startswith("Løsning") or line.startswith("Anbefaling") or line.startswith("Mulige"):
                 formatted += f"<div style='font-size:0.8rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:#00a88d; margin-top:10px; margin-bottom:4px;'>{line}</div>"
             elif line.startswith("- "):
-                formatted += f"<div style='font-size:0.875rem; color:#374151; padding-left:12px; margin-bottom:3px; line-height:1.5;'>· {line[2:]}</div>"
+                formatted += f"<div style='font-size:0.875rem; color:#dbeafe; padding-left:12px; margin-bottom:3px; line-height:1.5;'>· {line[2:]}</div>"
             else:
-                formatted += f"<div style='font-size:0.875rem; color:#374151; line-height:1.5;'>{line}</div>"
-        st.markdown(f"<div>{formatted}</div>", unsafe_allow_html=True)
+                formatted += f"<div style='font-size:0.875rem; color:#dbeafe; line-height:1.5;'>{line}</div>"
+        st.markdown(f"<div style='color:#dbeafe;'>{formatted}</div>", unsafe_allow_html=True)
 
         if nabovarsel_sendt == "Nei":
             st.markdown("<div style='height:14px'></div>", unsafe_allow_html=True)
@@ -1001,7 +1012,7 @@ if analyse_btn:
                 display:flex; align-items:center; justify-content:center;
                 font-size:0.7rem; font-weight:700; flex-shrink:0;
               ">{symbol}</div>
-              <div style="font-size:0.82rem; color:#374151; line-height:1.4;">{rule.get('label')}</div>
+              <div style="font-size:0.82rem; color:#1f2937; line-height:1.4;">{rule.get('label')}</div>
             </div>
             """, unsafe_allow_html=True)
         st.markdown("</div>", unsafe_allow_html=True)
@@ -1020,13 +1031,13 @@ if analyse_btn:
             if val:
                 st.markdown(f"""
                 <div style="margin-bottom:10px;">
-                  <div style="font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:#64748b; margin-bottom:3px;">{label}</div>
-                  <div style="font-size:0.82rem; color:#374151; line-height:1.5;">{val}</div>
+                  <div style="font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:#8aafc8; margin-bottom:3px;">{label}</div>
+                  <div style="font-size:0.82rem; color:#dbeafe; line-height:1.5;">{val}</div>
                 </div>
                 """, unsafe_allow_html=True)
 
         st.markdown("""
-        <div style="font-size:0.75rem; color:#94a3b8; margin-top:8px; font-style:italic;">
+        <div style="font-size:0.75rem; color:#8aafc8; margin-top:8px; font-style:italic;">
           Lovhenvisninger er forenklede og kun for beslutningsstøtte.
         </div>
         """, unsafe_allow_html=True)
