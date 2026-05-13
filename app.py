@@ -7,6 +7,11 @@ from io import BytesIO
 from docx.shared import Pt
 from datetime import datetime
 
+# Helper to load CSS from file
+def load_css(file_path="styles.css"):
+    with open(file_path, "r", encoding="utf-8") as f:
+        st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
+
 
 # ─────────────────────────────────────────────
 #  BUSINESS LOGIC  (unchanged)
@@ -369,10 +374,6 @@ def build_summary_docx(data, result):
     return buffer
 
 
-# ─────────────────────────────────────────────
-#  PAGE CONFIG & GLOBAL CSS
-# ─────────────────────────────────────────────
-
 st.set_page_config(
     page_title="Byggesaksprototype",
     layout="wide",
@@ -380,225 +381,8 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-st.markdown("""
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
-
-<style>
-/* ── Root tokens ─────────────────────────────────────── */
-:root {
-  --navy:   #0d1b2a;
-  --navy2:  #162032;
-  --navy3:  #1e2d3d;
-  --teal:   #00c9a7;
-  --teal2:  #00a88d;
-  --amber:  #f59e0b;
-  --red:    #ef4444;
-  --green:  #10b981;
-  --blue:   #3b82f6;
-  --surface:#0d1b2a;
-  --border: rgba(138,175,200,0.35);
-  --text:   #dbeafe;
-  --muted:  #8aafc8;
-  --white:  #ffffff;
-  --radius: 12px;
-  --shadow: 0 4px 24px rgba(13,27,42,0.10);
-  --shadow-lg: 0 8px 40px rgba(13,27,42,0.16);
-}
-
-/* ── Global reset ────────────────────────────────────── */
-html, body, [class*="css"] {
-  font-family: 'DM Sans', sans-serif !important;
-  color: var(--text) !important;
-  background: var(--surface) !important;
-}
-
-.stApp {
-  background: linear-gradient(135deg, #0d1b2a 0%, #111827 55%, #162032 100%) !important;
-  color: var(--text) !important;
-}
-
-.main,
-.block-container,
-section.main,
-[data-testid="stAppViewContainer"] {
-  background: transparent !important;
-  color: var(--text) !important;
-}
-
-.stMarkdown,
-.stMarkdown p,
-.stMarkdown span,
-.stMarkdown div {
-  color: inherit;
-}
-
-/* ── Sidebar ─────────────────────────────────────────── */
-[data-testid="stSidebar"] {
-  background: var(--navy) !important;
-  border-right: none !important;
-}
-[data-testid="stSidebar"] * {
-  color: #c8d8e8 !important;
-  font-family: 'DM Sans', sans-serif !important;
-}
-[data-testid="stSidebar"] h1,
-[data-testid="stSidebar"] h2,
-[data-testid="stSidebar"] h3,
-[data-testid="stSidebar"] strong {
-  color: var(--white) !important;
-  font-family: 'Syne', sans-serif !important;
-}
-[data-testid="stSidebar"] .stMarkdown p {
-  font-size: 0.88rem !important;
-  line-height: 1.65 !important;
-  color: #9ab2c8 !important;
-}
-[data-testid="stSidebar"] hr {
-  border-color: #2a3f55 !important;
-}
-
-/* ── Hide default Streamlit chrome ──────────────────── */
-#MainMenu, footer, header { visibility: hidden !important; }
-[data-testid="stToolbar"] { display: none !important; }
-[data-testid="stDecoration"] { display: none !important; }
-.block-container { padding-top: 1.5rem !important; max-width: 1160px !important; }
-
-/* Keep sidebar visible and remove collapse controls */
-[data-testid="collapsedControl"],
-[data-testid="stSidebarCollapseButton"] {
-  display: none !important;
-}
-
-[data-testid="stSidebar"] {
-  min-width: 18rem !important;
-  max-width: 18rem !important;
-}
-
-/* ── Typography ──────────────────────────────────────── */
-h1, h2, h3, h4 {
-  font-family: 'Syne', sans-serif !important;
-  letter-spacing: -0.02em !important;
-}
-
-/* ── Dividers ────────────────────────────────────────── */
-hr { border-color: var(--border) !important; margin: 1.6rem 0 !important; }
-
-/* ── Selectbox & inputs ──────────────────────────────── */
-[data-testid="stSelectbox"] label,
-[data-testid="stNumberInput"] label,
-[data-testid="stRadio"] label,
-[data-testid="stFileUploader"] label {
-  font-size: 0.82rem !important;
-  font-weight: 700 !important;
-  text-transform: uppercase !important;
-  letter-spacing: 0.07em !important;
-  color: #8aafc8 !important;
-}
-
-[data-testid="stSelectbox"] label *,
-[data-testid="stNumberInput"] label *,
-[data-testid="stRadio"] label *,
-[data-testid="stFileUploader"] label * {
-  color: #8aafc8 !important;
-}
- [data-testid="stSelectbox"] > div > div,
- [data-testid="stNumberInput"] input {
-   border: 1.5px solid var(--border) !important;
-   border-radius: 8px !important;
-   background: var(--white) !important;
-   color: #1a2535 !important;
-   font-size: 0.95rem !important;
-   transition: border-color 0.2s !important;
- }
-
- [data-testid="stSelectbox"] * {
-   color: #1a2535 !important;
- }
-
- [data-testid="stNumberInput"] input {
-   color: #1a2535 !important;
-   -webkit-text-fill-color: #1a2535 !important;
- }
-
- [data-baseweb="select"] span {
-   color: #1a2535 !important;
- }
-[data-testid="stSelectbox"] > div > div:hover,
-[data-testid="stNumberInput"] input:focus {
-  border-color: var(--teal) !important;
-  box-shadow: 0 0 0 3px rgba(0,201,167,0.12) !important;
-}
-
-/* ── Buttons ─────────────────────────────────────────── */
-[data-testid="stButton"] > button {
-  background: var(--teal) !important;
-  color: var(--navy) !important;
-  font-family: 'Syne', sans-serif !important;
-  font-weight: 700 !important;
-  font-size: 0.95rem !important;
-  letter-spacing: 0.04em !important;
-  border: none !important;
-  border-radius: 8px !important;
-  padding: 0.65rem 2.2rem !important;
-  transition: background 0.2s, transform 0.15s, box-shadow 0.2s !important;
-  box-shadow: 0 2px 12px rgba(0,201,167,0.30) !important;
-}
-[data-testid="stButton"] > button:hover {
-  background: var(--teal2) !important;
-  transform: translateY(-1px) !important;
-  box-shadow: 0 6px 20px rgba(0,201,167,0.38) !important;
-}
-[data-testid="stButton"] > button:active { transform: translateY(0) !important; }
-
-/* ── Download buttons ────────────────────────────────── */
-[data-testid="stDownloadButton"] > button {
-  background: transparent !important;
-  color: var(--teal) !important;
-  font-family: 'Syne', sans-serif !important;
-  font-weight: 600 !important;
-  font-size: 0.9rem !important;
-  border: 1.5px solid var(--teal) !important;
-  border-radius: 8px !important;
-  padding: 0.55rem 1.4rem !important;
-  transition: all 0.2s !important;
-}
-[data-testid="stDownloadButton"] > button:hover {
-  background: var(--teal) !important;
-  color: var(--navy) !important;
-}
-
-/* ── Radio ───────────────────────────────────────────── */
-[data-testid="stRadio"] > div {
-  gap: 0.6rem !important;
-}
-
-/* ── Success / info alerts ───────────────────────────── */
-[data-testid="stAlert"] {
-  border-radius: var(--radius) !important;
-  border-left-width: 4px !important;
-}
-
-/* ── Expander ────────────────────────────────────────── */
-[data-testid="stExpander"] {
-  border: 1.5px solid rgba(138,175,200,0.35) !important;
-  border-radius: var(--radius) !important;
-  background: rgba(255,255,255,0.04) !important;
-}
-
-[data-testid="stExpander"] summary,
-[data-testid="stExpander"] summary *,
-[data-testid="stExpander"] p,
-[data-testid="stExpander"] div {
-  color: #dbeafe !important;
-}
-
-[data-testid="stExpander"] code,
-[data-testid="stExpander"] pre {
-  color: #1a2535 !important;
-  background: #f8fafc !important;
-}
-</style>
-""", unsafe_allow_html=True)
+# Load CSS from external file
+load_css()
 
 
 # ─────────────────────────────────────────────
@@ -861,7 +645,6 @@ with col_b:
         index=None if not prefill_data else (["Ja","Nei"].index(prefill_data.get("nabovarsel_sendt","Ja")) if prefill_data.get("nabovarsel_sendt","Ja") in ["Ja","Nei"] else None),
         placeholder="Velg ja/nei")
 
-st.markdown("</div>", unsafe_allow_html=True)
 
 
 # ─────────────────────────────────────────────
